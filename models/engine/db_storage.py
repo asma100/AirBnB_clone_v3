@@ -85,3 +85,4 @@ class DBStorage:
         Counts the number of objects in the database for a given class"""
         query = self.__session.query(cls)
         return query.count()
+
