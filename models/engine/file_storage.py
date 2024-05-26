@@ -65,6 +65,15 @@ class FileStorage:
             if key in self.__objects:
                 del self.__objects[key]
 
+    def get_object_by_id_and_class(session, model_class, object_id):
+        """Retrieves a single object from the database based on ID and class name"""
+
+        try:
+            return session.query(model_class).get(object_id)
+        except Exception as e:
+            print(f"Error retrieving object: {e}")
+            return None            
+
     def close(self):
         """call reload() method for deserializing the JSON file to objects"""
         self.reload()
