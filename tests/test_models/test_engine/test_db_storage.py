@@ -68,21 +68,28 @@ test_db_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
-class TestFileStorage(unittest.TestCase):
-    """Test the FileStorage class"""
+class TestDBStorage(unittest.TestCase):
+    """Test the DBStorage class"""
+
+    def test_db_get_existing(self):
+        """Tests if DBStorage.get() retrieves an existing object."""
+        # Create a test object
+        user = User(email="test@example.com", password="test123")
+        user.save()  # Save the object to the database
+
+        # Retrieve the object using get()
+        retrieved_user = DBStorage.get(User, user.id)
+
+        # Assert that the retrieved object is the same as the created object
+        self.assertIs(retrieved_user, user)
+
+        # Delete the test object
+        user.delete()
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
         self.assertIs(type(models.storage.all()), dict)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_all_no_class(self):
-        """Test that all returns all rows when no class is passed"""
-
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_new(self):
-        """test that new adds an object to the database"""
-
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_save(self):
-        """Test that save properly saves objects to file.json"""
+    def test_all_no_class

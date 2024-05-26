@@ -67,12 +67,9 @@ class FileStorage:
 
     def get(self, cls, id):
         """Retrieves a single object from the database based on ID and class name"""
+        key = f"{cls.__name__}.{id}"
+        return self.__objects.get(key)
 
-        try:
-            return session.query(model_class).get(object_id)
-        except Exception as e:
-            print(f"Error retrieving object: {e}")
-            return None            
 
     def close(self):
         """call reload() method for deserializing the JSON file to objects"""
@@ -81,5 +78,12 @@ class FileStorage:
     def count(self, cls=None):
         """
         Counts the number of objects in the database for a given class"""
-        query = self.__session.query(cls)
-        return query.count()    
+        all_objs = self.all()  # Get all objects from the dictionary
+        if cls is None:
+            return len(all_objs)  # Count all objects if no class specified
+        else:
+            count = 0
+            for key, obj in all_objs.items():
+                if key.split(".")[0] == cls.__name__:  # Check class name from key
+                    count += 1
+                    return count
