@@ -65,7 +65,7 @@ class FileStorage:
             if key in self.__objects:
                 del self.__objects[key]
 
-    def get_object_by_id_and_class(session, model_class, object_id):
+    def get(self, cls, id):
         """Retrieves a single object from the database based on ID and class name"""
 
         try:
@@ -77,3 +77,9 @@ class FileStorage:
     def close(self):
         """call reload() method for deserializing the JSON file to objects"""
         self.reload()
+        
+    def count(self, cls=None):
+        """
+        Counts the number of objects in the database for a given class"""
+        query = self.__session.query(cls)
+        return query.count()    
